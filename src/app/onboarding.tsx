@@ -1,3 +1,4 @@
+import { router } from "expo-router";
 import { View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -9,6 +10,11 @@ import { OrnamentalFrame } from "@/components/onboarding/OrnamentalFrame";
 import { PaginationIndicator } from "@/components/onboarding/PaginationIndicator";
 
 export default function Onboarding() {
+  const handleGetStarted = () => {
+    // Replace so the hardware back button doesn't return to onboarding.
+    router.replace("/home");
+  };
+
   return (
     <DecorativeBackground>
       <OrnamentalFrame />
@@ -22,7 +28,7 @@ export default function Onboarding() {
 
           <View className="items-center gap-5 w-full">
             <PaginationIndicator />
-            <CTASection />
+            <CTASection onPressGetStarted={handleGetStarted} />
           </View>
         </View>
       </SafeAreaView>
