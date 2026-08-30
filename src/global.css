@@ -8,12 +8,13 @@
  * Design tokens
  * Keep in sync with src/constants/theme/*.ts (used for values that can't be
  * expressed as NativeWind classes, e.g. platform shadows).
+ * Source: prompt_material/01-design-system.png
  */
 @theme {
   /* Brand */
   --color-forest: #0f3b2e;
   --color-terracotta: #e25a2c;
-  --color-gold: #f2884b;
+  --color-gold: #f2b848;
   --color-sage: #7fa77a;
 
   /* Semantic */
@@ -24,13 +25,19 @@
 
   /* Neutrals */
   --color-text: #0b241a;
-  --color-text-secondary: #33423d;
-  --color-surface: #f7f1e6;
-  --color-border: #f1e4d5;
-  --color-background: #fff9f1;
+  --color-text-secondary: #33403a;
+  --color-surface: #faf6ef;
+  --color-border: #e8dcc3;
+  --color-background: #efd8ac;
+
+  /* Disabled state (derived: not in the swatch panel, sampled from the
+     disabled button/chip examples in the UI Tokens section) */
+  --color-disabled: #ecd7ba;
+  --color-disabled-text: #b7a480;
 
   /* Fonts — see src/hooks/use-app-fonts.ts for how these are loaded */
-  --font-display: "Lora-Bold";
+  --font-display-semibold: "Lora-SemiBold";
+  --font-display-bold: "Lora-Bold";
   --font-sans: "Lora-Regular";
   --font-sans-medium: "Lora-Medium";
   --font-sans-semibold: "Lora-SemiBold";
@@ -67,8 +74,8 @@
  * Component utilities
  * Static, reusable UI patterns from the design system (see
  * prompt_material/01-design-system.png). Interactive states (press,
- * disabled) are applied where the class is used, since they depend on
- * component state.
+ * disabled) and layout concerns (position, sizing at the call site) are
+ * applied where the class is used, since they depend on component state.
  *
  * Deliberately NOT wrapped in `@layer components`: React Native Web's
  * reset styles (.css-view-*) are unlayered, and per the CSS cascade-layers
@@ -76,6 +83,8 @@
  * specificity or source order — so a layered .card would always lose its
  * background/padding/border to the reset.
  */
+
+/* Cards */
 .card {
   background-color: var(--color-surface);
   border: 1px solid var(--color-border);
@@ -83,6 +92,14 @@
   padding: 16px;
 }
 
+.card--featured {
+  background-color: var(--color-forest);
+  border-radius: var(--radius-2xl);
+  padding: 20px;
+  overflow: hidden;
+}
+
+/* Badges / chips */
 .badge {
   flex-direction: row;
   align-items: center;
@@ -96,24 +113,41 @@
   padding-right: 12px;
 }
 
-.badge--success {
-  background-color: #e7e6de;
-  border-color: #c3cac0;
+.badge--sage {
+  background-color: #f0f2e8;
+  border-color: #d9e3d2;
 }
 
 .badge--accent {
-  background-color: #fce6d9;
-  border-color: #f6c9b6;
+  background-color: #fce9df;
+  border-color: #f6cbba;
 }
 
 .badge--info {
-  background-color: #e9eaf0;
-  border-color: #beccef;
+  background-color: #e5eaf6;
+  border-color: #becef3;
+}
+
+.badge--success {
+  background-color: #e3f1e2;
+  border-color: #b9e1c3;
+}
+
+.badge--warning {
+  background-color: #fef1db;
+  border-color: #fce0b0;
 }
 
 .badge--gold {
-  background-color: #fdecd2;
-  border-color: #f6d9a6;
+  background-color: #fdf4e2;
+  border-color: #fbe8c3;
+}
+
+/* Inputs */
+.label {
+  font-family: var(--font-sans-medium);
+  font-size: var(--text-body-sm);
+  color: var(--color-text-secondary);
 }
 
 .input {
@@ -129,6 +163,21 @@
   color: var(--color-text);
 }
 
+.search-bar {
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  background-color: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  padding-top: 12px;
+  padding-bottom: 12px;
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+/* Buttons — three tiers (filled, outline, text) plus an icon-only circle,
+   each with forest / terracotta / disabled color variants. */
 .btn {
   flex-direction: row;
   align-items: center;
@@ -141,15 +190,71 @@
   padding-right: 24px;
 }
 
-.btn--primary {
+.btn--forest {
+  background-color: var(--color-forest);
+}
+
+.btn--terracotta {
   background-color: var(--color-terracotta);
 }
 
-.btn--secondary {
-  background-color: transparent;
-  border: 1px solid var(--color-forest);
+.btn--disabled {
+  background-color: var(--color-disabled);
 }
 
+.btn-outline {
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background-color: transparent;
+  border-width: 1.5px;
+  border-radius: var(--radius-full);
+  padding-top: 13px;
+  padding-bottom: 13px;
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+.btn-outline--forest {
+  border-color: var(--color-forest);
+}
+
+.btn-outline--terracotta {
+  border-color: var(--color-terracotta);
+}
+
+.btn-outline--disabled {
+  border-color: var(--color-disabled);
+}
+
+.btn-text {
+  flex-direction: row;
+  align-items: center;
+  gap: 4px;
+}
+
+.btn-icon {
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+}
+
+.btn-icon--forest {
+  background-color: var(--color-forest);
+}
+
+.btn-icon--terracotta {
+  background-color: var(--color-terracotta);
+}
+
+.btn-icon--disabled {
+  background-color: var(--color-disabled);
+}
+
+/* Tabs / segmented control */
 .segmented {
   flex-direction: row;
   background-color: var(--color-surface);
@@ -169,4 +274,70 @@
 
 .segmented__item--active {
   background-color: var(--color-forest);
+}
+
+/* Bottom tab bar */
+.tab-bar {
+  flex-direction: row;
+  background-color: #fff;
+  border-top-width: 1px;
+  border-top-color: var(--color-border);
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.tab-bar__item {
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+/* Progress bar */
+.progress-track {
+  height: 8px;
+  background-color: var(--color-border);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 8px;
+  background-color: var(--color-terracotta);
+  border-radius: var(--radius-full);
+}
+
+/* Avatar */
+.avatar {
+  border-radius: var(--radius-full);
+  border-width: 2px;
+  border-color: var(--color-forest);
+  overflow: hidden;
+}
+
+.avatar__status {
+  border-radius: var(--radius-full);
+  border-width: 2px;
+  border-color: #fff;
+  background-color: var(--color-success);
+}
+
+/* Notification / alert */
+.alert {
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-2xl);
+  padding: 16px;
+}
+
+.alert__icon {
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-success);
 }
